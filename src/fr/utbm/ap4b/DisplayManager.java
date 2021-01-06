@@ -1,22 +1,23 @@
 package fr.utbm.ap4b;
 
+import java.util.ArrayList;
+
 import fr.utbm.ap4b.ui.CardDraw;
+import fr.utbm.ap4b.ui.Displayable;
 import fr.utbm.ap4b.ui.GameInfo;
 import fr.utbm.ap4b.ui.GraphUI;
 import fr.utbm.ap4b.ui.PlayerInfo;
 import fr.utbm.ap4b.utils.Resources;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class DisplayManager extends Application {
 	public static Stage mainStage; //fenêtre principale
 	private GameManager GM;
+	private ArrayList<Displayable> ComponentList;
 	
 	public static void main(String[] args) {
 		System.out.println("Main methode - Thread: " + Thread.currentThread().getName());
@@ -47,6 +48,13 @@ public class DisplayManager extends Application {
 		CardDraw CD = new CardDraw(GM);
 		PlayerInfo PI = new PlayerInfo(GM);
 		GameInfo GI = new GameInfo(GM);
+
+		ComponentList = new ArrayList<Displayable>();
+		ComponentList.add(graphUI);
+		ComponentList.add(CD);
+		ComponentList.add(PI);
+		ComponentList.add(GI);
+		
 		BorderPane root = new BorderPane();
 		root.setCenter(graphUI.getNode());
 		root.setBottom(PI.getNode());
@@ -59,10 +67,17 @@ public class DisplayManager extends Application {
 		mainStage.centerOnScreen();//on initialise quelques propriétés
 		mainStage.setAlwaysOnTop(false);
 		
-		graphUI.start();//à faire après le show() absolument
-		//graphUI.update();//pour actualiser l'élément
+		for (Displayable Component : ComponentList) {
+			Component.start();
+		}
 	}
-
+	
+	public void updateAll() {
+		for (Displayable Component : ComponentList) {
+			Component.update();
+		}
+	}
+	
 	@Override
 	public void stop() throws Exception {
 		System.out.println("stop methode - Thread: " + Thread.currentThread().getName());

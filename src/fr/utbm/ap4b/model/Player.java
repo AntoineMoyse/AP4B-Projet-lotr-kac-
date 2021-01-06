@@ -20,4 +20,12 @@ public class Player {
 		PlayerName = playerName;
 		Color = color;
 	}
+
+	public ArrayList<CreditCard> getCreditList() {
+		return CreditList;
+	}
+
+	public ArrayList<DestinationGoalCard> getDestinationGoalList() {
+		return DestinationGoalList;
+	}
 }
